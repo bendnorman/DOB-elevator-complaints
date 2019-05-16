@@ -89,7 +89,7 @@ The most important feature for making classifications was violation ratio. Asses
 
 While the validation and testing accuracy have room for improvement, the model did show slight improvement in priority score on the test set. For a given day, I ordered complaints based on the probability of prediction values. Here are the priority scores on the test set: 
 
-----------------------
+
 **Random** 
 Average True positive Accuracy: 0.70
 Average True Negative Accuracy: 0.74
@@ -105,7 +105,7 @@ Average True Negative Accuracy: 0.77
 **Model Score**
 Average True positive Accuracy: 0.76
 Average True Negative Accuracy: 0.79
------------------------
+
 
 ## Conclusion
 
