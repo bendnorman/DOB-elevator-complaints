@@ -92,18 +92,22 @@ While the validation and testing accuracy have room for improvement, the model d
 
 **Random** 
 Average True positive Accuracy: 0.70
+
 Average True Negative Accuracy: 0.74
 
 **Baseline (DOB Ordering)** 
 Average True positive Accuracy: 0.70
+
 Average True Negative Accuracy: 0.74
 
 **Violation Ratio Score**
 Average True positive Accuracy: 0.74
+
 Average True Negative Accuracy: 0.77
 
 **Model Score**
 Average True positive Accuracy: 0.76
+
 Average True Negative Accuracy: 0.79
 
 
