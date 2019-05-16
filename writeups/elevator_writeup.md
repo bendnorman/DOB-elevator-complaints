@@ -1,8 +1,6 @@
 # NYC DOB Elevator Violation Classification Project
 This project evaluates the effectiveness of NYC's Department of Buildings ordering of 311 elevator inspections. 
 
-Check out my code in `DOB_elevator_complaints_model.ipynb`
-
 ## Background
 In January 2019 I read [this](https://therealdeal.com/issues_articles/elevator-accidents-new-york-city/) article by Kathryn Brenzel and David Jeans about elevator accidents in New York City and it freaked me out!  The article outlined a number inefficiencies and problems with the current methods elevators are inspected and fixed.  For example, New York state does not require elevator mechanics to be licensed... yikes!
 
@@ -24,7 +22,7 @@ I began my analysis by filtering down to just elevator complaints.  There are fi
 
 Next, I determined whether or not the complaint resulted in a violation using 'Disposition Code'. Here is a bar graph of the disposition codes.
 
-![alt text](writeups/disposition.png)
+![alt text](disposition.png)
 
 **Result in Violation**: A8 (ECB Violation Served), A1 (Buildings Violation(s) Served)
 
@@ -35,7 +33,7 @@ Next, I determined whether or not the complaint resulted in a violation using 'D
 ## Analysis
 My main question for this project was: how effective is the DOB at prioritizing complaints that result in violations?  To answer this question I began by calculating the 'Response Time' for each complaint.  Response time is the time between the date the complaint was made and the date the complaint was inspected. To get a general understanding of how effective the DOB's inspection ordering was, I plotted a histogram of Response Time for all complaints and complaints that resulted in a violation:
 
-![alt text](writeups/response.png)
+![alt text](response.png)
 
 The ratio of violations to complaints responded within the first day suggests that the DOB has some method of somewhat effectively prioritizing complaints.  For most response time bins, the ratio of violations to complaints is mostly the same.  Ideally the number of complaints that result in a violation should have lower response times than the complaints that do not result in complaints. 
 
@@ -83,7 +81,7 @@ I began the feature selection process by creating a mapping from Building Index 
 
 I then created train, val and test splits, ensuring that complaints with the same BIN were in the same split so that the model would not memorize buildings' features. Once the splits were created, I trained a Random Forest Model and did a simple hyper parameter search on max depth of the trees. The model's training accuracy was 77% and the validation accuracy as 60%. Once the model was tuned, I evaluated the model on the test set. The testing accuracy was also 60% which means the model was able to generalize to different data. I also, plotted the feature importances for the classifier:
 
-![alt text](writeups/important.png)
+![alt text](important.png)
 
 The most important feature for making classifications was violation ratio. Assessed value total of the building lot and the year built were also import features.  
 
