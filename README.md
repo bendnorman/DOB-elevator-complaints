@@ -110,9 +110,9 @@ Average True Negative Accuracy: 0.77
 
 **Model Score**
 
-Average True positive Accuracy: 0.76
+Average True positive Accuracy: **0.76**
 
-Average True Negative Accuracy: 0.79
+Average True Negative Accuracy: **0.79**
 
 
 ## Conclusion
