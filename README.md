@@ -6,9 +6,9 @@ Check out my code in `DOB_elevator_complaints_model.ipynb`
 ## Background
 In January 2019 I read [this](https://therealdeal.com/issues_articles/elevator-accidents-new-york-city/) article by Kathryn Brenzel and David Jeans about elevator accidents in New York City and it freaked me out!  The article outlined a number inefficiencies and problems with the current methods elevators are inspected and fixed.  For example, New York state does not require elevator mechanics to be licensed... yikes!
 
-Something that stood out to me was the sheer number of elevators in NYC that need to be inspected by the DOB and third party inspectors.  The large number of elevators and inefficient inspections result in problems. Brenzel and Jeans found: "A report released in June by state Comptroller Thomas DiNapoli found that 14,828 mandated inspections were not conducted by DOB-hired inspectors between 2015 and 2016."  While 40% of these elevator were not inspected because the inspectors could not get into the building, what happened with the other 60% of these elevators?!  
+Something that stood out to me was the sheer number of elevators in NYC that need to be inspected by the DOB and third party inspectors.  The large number of elevators and inefficient inspections result in problems. Brenzel and Jeans found: "A report released in June by state Comptroller Thomas DiNapoli found that 14,828 mandated inspections were not conducted by DOB-hired inspectors between 2015 and 2016."  40% of these elevator were not inspected because the inspectors could not get into the building, but what happened with the other 60% of these elevators?!  
 
-Right around this time I was going down my elevator rapid hole, I went to NYC school of data and learned about The Mayor's Office of Analyics's (MODA) work. MODA worked with DOB to increase the efficiency of building inspectors by intelligently prioritizing complaints that result in illegal conversion violations. The project's problem statement is: "The main challenge is identifying which complaints to prioritize given the limited number of inspectors." [Here](https://moda-nyc.github.io/Project-Library/projects/illegal-conversions/) is a link to the project. MODA assembled relevant building features and was able to successfully classify 311 complaints as violations and non violations using a Random Forest Classifier.  They piloted their model in Queens which resulted in illegal conversions being responded to faster. 
+Right around this time I was going down my elevator rapid hole, I went to NYC school of data and learned about The Mayor's Office of Analyics's (MODA) work. MODA worked with the DOB to increase the efficiency of building inspections by intelligently prioritizing complaints that result in illegal conversion violations. The project's problem statement is: "The main challenge is identifying which complaints to prioritize given the limited number of inspectors." [Here](https://moda-nyc.github.io/Project-Library/projects/illegal-conversions/) is a link to the project. MODA assembled relevant building features and was able to successfully classify 311 complaints as violations and non violations using a Random Forest Classifier.  They piloted their model in Queens which resulted in illegal conversions being responded to faster. 
 
 This got me thinking ... could I do the same thing for ... Elevators???
 
@@ -18,7 +18,7 @@ This got me thinking ... could I do the same thing for ... Elevators???
 The purpose of this project is to use DOB inspection and violation data to perform an analysis of historical outcomes, find common traits of buildings that have elevator violations, and use that data to risk-analyse new complaints to prioritize future inspections.
 
 ## Dataset
-I analyzed elevator complaints in the [DOB Complaints Received](https://data.cityofnewyork.us/Housing-Development/DOB-Complaints-Received/eabe-havv) dataset. The dataset is updated daily with all building complaints and contains records back to 1989. It contains fields such as 'Date Entered', 'Date Inspected', 'BIN', and 'Complaint Category'.
+I analyzed elevator complaints in the [DOB Complaints Received](https://data.cityofnewyork.us/Housing-Development/DOB-Complaints-Received/eabe-havv) dataset. The dataset is updated daily with all building complaints and contains records going back to 1989. It contains fields such as 'Date Entered', 'Date Inspected', 'BIN', and 'Complaint Category'.
 
 I began my analysis by filtering down to just elevator complaints.  There are five different types of elevator complaints but I focused on complaint category 63 (Elevator-Danger Condition/Shaft Open/Unguarded) B because it is the vast majority of elevator complaints (93%) and simplifies the problem.  
 
@@ -37,7 +37,7 @@ My main question for this project was: how effective is the DOB at prioritizing 
 
 ![alt text](writeups/response.png)
 
-The ratio of violations to complaints responded within the first day suggests that the DOB has some method of somewhat effectively prioritizing complaints.  For most response time bins, the ratio of violations to complaints is mostly the same.  Ideally the number of complaints that result in a violation should have lower response times than the complaints that do not result in complaints. 
+The ratio of violations to complaints responded within the first day suggests that the DOB has some method of effectively prioritizing complaints.  For most response time bins, the ratio of violations to complaints suggests mostly random ordering.  Ideally the number of complaints that result in a violation should have lower response times than the complaints that do not result in complaints. 
 
 ## Evaluation Metric
 I implemented an evaluation metric called priority score that measures how an ordering of complaints for a given day compares to the  optimal  ordering.   The  optimal  ordering  being  all  of  the  complaints  resulting  in violations positioned first in the order and all of the complaints not resulting in violations positioned last.  The final score is an average accuracy for complaints resulting in violations and complaints not resulting in violations amongst all days.  The higher the the accuracy,  the faster the DOB can address complaints that result in violations.  Priority score is nice because it accounts for the fluctuations of number of complaints on a given day.
@@ -62,7 +62,7 @@ Average Violation Accuracy: 0.52
 
 Average No Violation Accuracy: 0.57
 
-The DOB ordering was slightly better than the random ordering.  This confirms the idea that the DOB has some intuition into which complaints to prioritize.  
+The DOB ordering was slightly better than the random ordering.  This confirms the idea that the DOB has some intuition into which complaints to prioritize but shows there is a lot of room for improvemnt. 
 
 ## Can we do a better job prioritizing complaints?
 To improve on the ordering of inspection on a given day, I first calculated the number of previous complaints and violations associated with the building of a given complaint.  I also calculated the ratio of previous violations to previous complaints.  I calculated the priority score ordering the complaints using these three metrics and found the violation ratio to be the most effective. 
@@ -81,38 +81,38 @@ Prioritizing complaints based on violation ratio history results in a 5 and 6 po
 
 I began the feature selection process by creating a mapping from Building Index Number (BIN) to Borough Block Lot number (BBL) in order to merge PLUTO and the DOB complaints dataset. There can be multiple BINs for a BBL. 
 
-I then created train, val and test splits, ensuring that complaints with the same BIN were in the same split so that the model would not memorize buildings' features. Once the splits were created, I trained a Random Forest Model and did a simple hyper parameter search on max depth of the trees. The model's training accuracy was 77% and the validation accuracy as 60%. Once the model was tuned, I evaluated the model on the test set. The testing accuracy was also 60% which means the model was able to generalize to different data. I also, plotted the feature importances for the classifier:
+I then created train, val and test splits, ensuring that complaints with the same BIN were in the same split so the model would not memorize buildings' features. Once the splits were created, I trained a Random Forest Model and did a simple hyper parameter search on max depth of the trees. The model's training accuracy was 77% and the validation accuracy was 60%. Once the model was tuned, I evaluated the model on the test set. The testing accuracy was also 60% which suggests the model was able to generalize to different data. I also, plotted the feature importances for the classifier:
 
 ![alt text](writeups/important.png)
 
-The most important feature for making classifications was violation ratio. Assessed value total of the building lot and the year built were also import features.  
+The most important feature for making classifications was violation ratio. Assessed value total of the building lot and the year the building was built were also import features.  
 
 While the validation and testing accuracy have room for improvement, the model did show slight improvement in priority score on the test set. For a given day, I ordered complaints based on the probability of prediction values. Here are the priority scores on the test set: 
 
 
 **Random** 
 
-Average True positive Accuracy: 0.70
+Average Violation Accuracy: 0.70
 
-Average True Negative Accuracy: 0.74
+Average No Violation Accuracy: 0.74
 
 **Baseline (DOB Ordering)** 
 
-Average True positive Accuracy: 0.70
+Average Violation Accuracy: 0.70
 
-Average True Negative Accuracy: 0.74
+Average No Violation Accuracy: 0.74
 
 **Violation Ratio Score**
 
-Average True positive Accuracy: 0.74
+Average Violation Accuracy: 0.74
 
-Average True Negative Accuracy: 0.77
+Average No Violation Accuracy: 0.77
 
 **Model Score**
 
-Average True positive Accuracy: **0.76**
+Average Violation Accuracy: **0.76**
 
-Average True Negative Accuracy: **0.79**
+Average No Violation Accuracy: **0.79**
 
 
 ## Conclusion
